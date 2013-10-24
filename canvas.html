@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="578" height="200"></canvas>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"
+        type="text/javascript"></script>
+
+    <script>
+      var width = 800, height = 600;
+      c = document.getElementById('myCanvas');
+      ctx = c.getContext('2d');
+      c.width = width;
+      c.height = height;
+      var x = 30;
+
+      var invaders = [];
+      createInvadersInRow();
+
+
+
+    var moves = {leftPressed:false, rightPressed: false, fire:false};
+        $(document).keydown(function(e){
+        if (e.keyCode == 37) {
+          // console.log("left pressed");
+           moves.leftPressed = true;
+        }
+        else if (e.keyCode == 39) {
+         //  console.log("right pressed");
+           moves.rightPressed = true;
+        }
+        else if(e.keyCode == 70){
+       //   console.log("space pressed");
+          moves.fire = true;
+        }
+      });
+
+
+//----------------------
+
+
+function createInvader(x, y) {
+  invaders.push({
+    x: x,
+    y: y
+  });
+}
+
+function createInvadersInRow() {
+  var x, y;
+  for (var i = 0; i < 10; i++) {
+    x = (i * 48) + 48;
+    y = 430;
+    createInvader(x, y);
+  }
+}
+
+function renderInvader(x, y) {
+ // console.log("renderInvader at : " + x + ", " + y );
+  var w = 32,
+    h = 32;
+  ctx.beginPath();
+  ctx.rect(x - (w / 2), y - (h / 2), w, h);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = 'black';
+  ctx.stroke();
+};
+
+function renderInvaders() {
+ // console.log("renderInvaders");
+  for (var i = 0, len = invaders.length; i < len; i++) {
+    renderInvader(invaders[i].x, invaders[i].y);
+  }
+};
+//-----------------------------
+
+
+    var clear = function(){
+      ctx.fillStyle = '#33CCFF';
+      ctx.beginPath();
+      ctx.rect(0, 0, width, height);
+      ctx.closePath();
+      ctx.fill();
+    };
+
+function moveInvadersInRow() {
+  if (moveInvadersLeft) {
+    for (var i = 0, len = invaders.length; i < len; i++) {
+      invaders[i].x -= 1;
+    }
+  } else {
+    for (var i = 0, len = invaders.length; i < len; i++) {
+      invaders[i].x += 1;
+    }
+  }
+}
+    //var processInput = function(){
+    //
+    //};
+    var bullets = new Array();
+
+    var y = 50;
+    var moveInvadersLeft = false;
+
+var movingInvaders = setInterval(function() {
+  moveInvadersLeft = moveInvadersLeft ? false : true;
+}, 2000);
+    var render = function(moves){
+moveInvadersInRow()
+
+
+      renderInvaders();
+
+      var step = 10;
+
+
+      if(moves.leftPressed){
+       // console.log("left pressed in render");
+        moves.leftPressed = false
+        x-=step;
+      }
+       if(moves.rightPressed){
+      //  console.log("right pressed in render");
+        moves.rightPressed = false;
+        x+=step;
+      }
+      if(moves.fire){
+
+       // console.log("fire pressed in renderere");
+        ctx.beginPath();
+        ctx.arc(x, y, 1, 2 * Math.PI, false);
+        ctx.fillStyle = 'green';
+        ctx.fill();
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = '#003300';
+        ctx.stroke();
+        y+=10;
+        if(y > height){
+          moves.fire = false;
+          y = 50;
+        }
+      }
+
+
+
+      console.log(moves);
+      ctx.beginPath();
+      ctx.rect(x, 40, 100, 50);
+      ctx.fillStyle = 'yellow';
+      ctx.fill();
+      ctx.lineWidth = 7;
+      ctx.strokeStyle = 'black';
+      ctx.stroke();
+
+        console.log("invader :  " + invaders);
+        invaders.map(function(current){
+        console.log("in map " + y + "cur.y " + current.y);
+        console.log(current);
+        if(y >= current.y && x > current.x - 10 && x < current.x + 32){
+          current.y = 1000;
+        }
+      });
+
+    }
+
+
+
+    /*var update = function(){
+      moveInvadersInRow()
+
+
+    };*/
+
+    //clear();
+   var gameLoop = setInterval(function (){
+      //console.log("gameLoop");
+      //  while (true)
+      //{
+        //console.log('.');
+        // console.log("loop");
+         clear();
+        // var moves = processInput();
+        // update();
+         render(moves);
+
+      // }
+    }, 17);
+
+   //var gameLoop = setInterval(function(){
+   // console.log(".");
+  //},1000);
+   //gameLoop();
+    //var loopWithTimeout = setTimeout(gameLoop, 1000);
+    //loopWithTimeout();
+
+
+
+    </script>
+  </body>
+</html>
