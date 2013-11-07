@@ -222,9 +222,9 @@ function clear() {
 	background.onload = function() {
 		context.drawImage(background, 0, 0);
 	};
-	background.src = 'http://localhost/~ash/SpaceInvaders/img/gridBackground.gif';
+	// background.src = 'http://localhost/~ash/SpaceInvaders/img/gridBackground.gif';
 
-	context.fillStyle = 'transparent';
+	context.fillStyle = '#eee';
 	context.beginPath();
 	context.rect(0, 0, width, height);
 	context.closePath();
